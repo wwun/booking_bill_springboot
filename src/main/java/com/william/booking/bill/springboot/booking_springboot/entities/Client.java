@@ -33,8 +33,8 @@ public class Client {
     @Size(max = 10)
     private String phone;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Order> orderList = new ArrayList<>();
+    // @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    // List<Order> orderList = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -68,13 +68,13 @@ public class Client {
         this.phone = phone;
     }
 
-    public List<Order> getOrderList() {
-        return orderList;
-    }
+    // public List<Order> getOrderList() {
+    //     return orderList;
+    // }
 
-    public void setOrderList(List<Order> orderList) {
-        this.orderList = orderList;
-    }
+    // public void setOrderList(List<Order> orderList) {
+    //     this.orderList = orderList;
+    // }
 
     
     

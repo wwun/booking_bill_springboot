@@ -1,5 +1,7 @@
 package com.william.booking.bill.springboot.booking_springboot.entities;
 
+import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -28,7 +30,8 @@ public class Dish {
 
     @NotNull(message = "{NotNull}")
     @Digits(integer = 5, fraction = 2, message="{Digits.price}")
-    private Double price;
+    @Column(precision = 5, scale = 2)
+    private BigDecimal price;
 
     @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetailList = new ArrayList<>();
@@ -52,11 +55,11 @@ public class Dish {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
