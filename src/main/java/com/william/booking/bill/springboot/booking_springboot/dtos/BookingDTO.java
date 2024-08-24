@@ -50,6 +50,5 @@ public class BookingDTO {
     public void setTimeReserved(LocalTime timeReserved) {
         this.timeReserved = timeReserved;
     }
-
     
 }

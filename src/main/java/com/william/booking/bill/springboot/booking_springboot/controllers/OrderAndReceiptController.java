@@ -1,6 +1,5 @@
 package com.william.booking.bill.springboot.booking_springboot.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,22 +18,15 @@ import jakarta.validation.Valid;
 @RequestMapping("/orderDetail")
 public class OrderAndReceiptController {
     
-    private OrderAndReceiptService orderAndReceiptService;
-    private final SharedService sharedService;
+    private final OrderAndReceiptService orderAndReceiptService;
 
-    public OrderAndReceiptController(OrderAndReceiptService orderAndReceiptService, SharedService sharedService){
+    public OrderAndReceiptController(OrderAndReceiptService orderAndReceiptService){
         this.orderAndReceiptService = orderAndReceiptService;
-        this.sharedService = sharedService;
     }
 
     @PostMapping
     public ResponseEntity<?> createOrderAndPayment(@Valid @RequestBody OrderAndReceiptDTO orderAndReceiptDTO){
-        try{
-            System.out.println("ordeeeeeeeeeeeeeeeeeeeer id"+sharedService.getOrderId());
-            System.out.println(new ObjectMapper().writeValueAsString(orderAndReceiptDTO));
-        }catch(Exception ex){
-            System.out.println("error: "+ex.getMessage());
-        }
+        
         int orderAndReceiptSaved = orderAndReceiptService.createOrderAndReceipt(orderAndReceiptDTO);
 
         System.out.println("entities saved: "+orderAndReceiptSaved);

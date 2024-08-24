@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,7 +23,6 @@ import com.william.booking.bill.springboot.booking_springboot.services.DishServi
 import com.william.booking.bill.springboot.booking_springboot.services.OrderService;
 import com.william.booking.bill.springboot.booking_springboot.services.SharedService;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @RestController

@@ -39,32 +39,8 @@ public class OrderAndReceiptServiceImpl implements OrderAndReceiptService{
     @Override
     public int createOrderAndReceipt(OrderAndReceiptDTO orderAndReceiptDTO){
 
-        //{"clientEmail":"jfarfan17@gmail.com","orderHour":"11:32","tip":6,"paymentAmount":66,"table":3,"orders":[{"id":12,"quantity":1},{"id":11,"quantity":1}]}
-
-        //OrderDetail
-        // Long id;
-        // Order order;
-        // Dish dish;
-        // Integer quantity
-
-        //Receipt
-        // Long id;
-        // Order order;
-        // BigDecimal totalAmount;
-        // BigDecimal tip;
-        // BigDecimal paymentAmount
-
-        //Order
-        // Long id;
-        // LocalDateTime dateTime;
-        // Integer reservedTable;
-        // Client client;
-        // List<OrderDetail> orderDetailList
-
         int areSaved = 0;
         Optional<Order> orderOptional = orderService.getOrderById(sharedService.getOrderId());
-
-        System.out.println("startiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiing: "+orderOptional.get());
 
         if(orderOptional.isPresent()){
             
@@ -72,29 +48,22 @@ public class OrderAndReceiptServiceImpl implements OrderAndReceiptService{
             List<OrderDetail> orderDetailListFromOrder = order.getOrderDetailList();
 
             BigDecimal totalAmount = BigDecimal.ZERO;
-            System.out.println("1111111111111111111111111111111111111");
 
             for(OrderDetailAndQuantityDTO orderDetailAndQuantityDTO : orderAndReceiptDTO.getOrdersAndQuantity() ){
 
-                System.out.println("222222222222222222222222222222222222");
-            
                 Optional<Dish> dishOptional = dishService.getDishById(orderDetailAndQuantityDTO.getDishId());
                 Integer orderQuantity = orderDetailAndQuantityDTO.getQuantityOrdered();
 
                 if(dishOptional.isPresent() && orderQuantity > 0){
 
-                    System.out.println("3333333333333333333333333333333333");
-
                     totalAmount = totalAmount.add(dishOptional.get().getPrice().multiply(new BigDecimal(orderQuantity)));
 
                     OrderDetail orderDetail = new OrderDetail();
-                    //orderDetail.setId(System.currentTimeMillis() + ThreadLocalRandom.current().nextInt(1, 1000));
                     orderDetail.setOrder(orderOptional.get());    //check
                     orderDetail.setDish(dishOptional.get());
                     orderDetail.setQuantity(orderQuantity);
 
                     Optional<OrderDetail> orderDetailSavedOptional = orderDetailService.createOrderDetail(orderDetail);
-                    System.out.println("orderDet saveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeed: "+orderDetailSavedOptional.get());
                     if(orderDetailSavedOptional.isPresent())
                         areSaved++;
 
@@ -112,9 +81,7 @@ public class OrderAndReceiptServiceImpl implements OrderAndReceiptService{
             receipt.setTip(orderAndReceiptDTO.getTip());
             receipt.setPaymentAmount(totalAmount.add(orderAndReceiptDTO.getTip()));
 
-            System.out.println("receipt to saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaave");
             Optional<Receipt> receiptSavedOptional = receiptService.createReceipt(receipt);
-            System.out.println("receipt saveeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeed: "+receiptSavedOptional.get());
             if(receiptSavedOptional.isPresent())
                 areSaved++;
 
