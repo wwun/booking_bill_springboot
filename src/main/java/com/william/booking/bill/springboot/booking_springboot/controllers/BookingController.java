@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,9 @@ import com.william.booking.bill.springboot.booking_springboot.services.ClientSer
 import com.william.booking.bill.springboot.booking_springboot.services.DishService;
 import com.william.booking.bill.springboot.booking_springboot.services.OrderService;
 import com.william.booking.bill.springboot.booking_springboot.services.SharedService;
+import com.william.booking.bill.springboot.booking_springboot.exceptions.BadRequestException;
+import com.william.booking.bill.springboot.booking_springboot.exceptions.NotFoundException;
+import com.william.booking.bill.springboot.booking_springboot.exceptions.OrderProcessingException;
 
 import jakarta.validation.Valid;
 
@@ -58,7 +62,7 @@ public class BookingController {
     @PostMapping("/clientBooking")
     public ResponseEntity<?> createBooking(@Valid @RequestBody BookingDTO bookingDTO, BindingResult result){
         if(result.hasFieldErrors()){
-            System.out.println("error: "+result.getAllErrors());
+            throw new BadRequestException("Invalid input data: "+result.getAllErrors());
         }
 
         System.out.println("client book");
@@ -79,7 +83,9 @@ public class BookingController {
             if(clientExistentOptional.isPresent()){
                 client = clientService.findByEmail(clientEmail).get();
                 sharedService.setClientId(client.getId());
-            }            
+            }else{
+                throw new NotFoundException("Check your email and password");
+            }
         }else{
             Long clientId = System.currentTimeMillis();
             client.setId(clientId);
@@ -104,9 +110,9 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.OK).body(bookingDTO);
         }catch(Exception ex){
             System.out.println("error: "+ex.getMessage());
+            throw new OrderProcessingException("Unexpected error while processing order");
         }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @GetMapping("/dishes")

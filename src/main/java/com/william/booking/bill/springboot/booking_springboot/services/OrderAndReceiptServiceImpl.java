@@ -13,6 +13,8 @@ import com.william.booking.bill.springboot.booking_springboot.entities.Dish;
 import com.william.booking.bill.springboot.booking_springboot.entities.Order;
 import com.william.booking.bill.springboot.booking_springboot.entities.OrderDetail;
 import com.william.booking.bill.springboot.booking_springboot.entities.Receipt;
+import com.william.booking.bill.springboot.booking_springboot.exceptions.BadRequestException;
+import com.william.booking.bill.springboot.booking_springboot.exceptions.OrderProcessingException;
 
 @Service
 public class OrderAndReceiptServiceImpl implements OrderAndReceiptService{
@@ -64,11 +66,16 @@ public class OrderAndReceiptServiceImpl implements OrderAndReceiptService{
                     orderDetail.setQuantity(orderQuantity);
 
                     Optional<OrderDetail> orderDetailSavedOptional = orderDetailService.createOrderDetail(orderDetail);
-                    if(orderDetailSavedOptional.isPresent())
+                    if(orderDetailSavedOptional.isPresent()){
                         areSaved++;
+                    }else{
+                        throw new OrderProcessingException("Failed to saver order detail");
+                    }
 
                     orderDetailListFromOrder.add(orderDetail);
 
+                }else{
+                    throw new BadRequestException("Invalid dish or quantity");
                 }
             }
 
@@ -82,8 +89,11 @@ public class OrderAndReceiptServiceImpl implements OrderAndReceiptService{
             receipt.setPaymentAmount(totalAmount.add(orderAndReceiptDTO.getTip()));
 
             Optional<Receipt> receiptSavedOptional = receiptService.createReceipt(receipt);
-            if(receiptSavedOptional.isPresent())
+            if(receiptSavedOptional.isPresent()){
                 areSaved++;
+            }else{
+                throw new OrderProcessingException("Failed to save receipt");
+            }
 
         }
 

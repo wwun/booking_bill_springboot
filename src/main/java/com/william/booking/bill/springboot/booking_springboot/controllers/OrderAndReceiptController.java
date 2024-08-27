@@ -7,10 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.william.booking.bill.springboot.booking_springboot.dtos.OrderAndReceiptDTO;
 import com.william.booking.bill.springboot.booking_springboot.services.OrderAndReceiptService;
-import com.william.booking.bill.springboot.booking_springboot.services.SharedService;
 
 import jakarta.validation.Valid;
 
